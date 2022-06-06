@@ -1,0 +1,1979 @@
+{
+	"info": {
+		"_postman_id": "2a07c573-c866-469a-8bf7-ba662696ccf9",
+		"name": "SDS_LIDB_DevSprint_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01_AT&T_LIDB-RestApi_Authenticate",
+			"item": [
+				{
+					"name": "0001_POST_getToken_Success",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in getting the Token\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_internalSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validate Response body with expected fields \" , function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.text()).to.include(\"access_token\");\r",
+									"    pm.expect(pm.response.text()).to.include(\"token_type\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"var jsonData = JSON.parse(responseBody);\r",
+									"\r",
+									"pm.collectionVariables.set(\"cus_LIDB_c_accessToken\", jsonData.data.access_token);\r",
+									"console.log(pm.collectionVariables.get(\"cus_LIDB_c_accessToken\"));\r",
+									"\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = \"TEST REQUEST NAME \\t \\t \\t\" + \"\\t \\tSTATUS \\n \\n\" + request.name + \"\\t \\t\" + script_status + \"\\n\"\r",
+									"let responses = [];\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":{{cus_LIDB_c_user}},\r\n    \"password\":{{cus_LIDB_c_password}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_restLidbWar}}/oauth",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_restLidbWar}}",
+								"oauth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AT&T_LIDB-RestApi-NotifREPTIMR",
+			"item": [
+				{
+					"name": "REPT-IMR_CreateRegistrationRequest_2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in Registering Listener in Hub\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([parseInt(pm.globals.get(\"const_LIDB_g_postSuccCode1\")), parseInt(pm.globals.get(\"const_LIDB_g_postSuccCode2\"))]);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"    pm.sendRequest('http://192.4.252.32:8082/starttest', (err, response) => {\r",
+									"    // This will have the output of your batch file\r",
+									"        console.log(response.text());\r",
+									"    })"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"query\": \"eventType=REPTIMR\",\r\n\"callbackUrl\": \"http://192.4.252.32:8082/restlidb/\",\r\n\"user\":\"k2\",\r\n\"role\":\"client\",\r\n\"app\":\"LIDB\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/hub/",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"hub",
+								""
+							],
+							"query": [
+								{
+									"key": "fields",
+									"value": "None",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AT&T_LIDB-RestApi-BasicMultiLrnOperations",
+			"item": [
+				{
+					"name": "0001_POST_MultiLRN_SuccessScenarioMORE=A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in RTRV-GLR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.data.MORE).to.include(\"A\");\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"   \r",
+									"    pm.expect(jsonData.data.lineRecords[0].LRN).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.lineRecords[0].href).not.eq(undefined);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"startLRN\":\"2012010001\",\r\n    \"endLRN\":  \"2012010003\"\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/getLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"getLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0002_POST_MultiLRN_SuccessScenarioMORE=M",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in RTRV-GLR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"   // pm.expect(jsonData.data.MORE).to.include(\"M\");\r",
+									"   checkCnt ++;\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"    pm.expect(jsonData.data).to.be.not.empty;\r",
+									"   \r",
+									"    pm.expect(jsonData.data.lineRecords[0].LRN).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.lineRecords[0].href).not.eq(undefined);\r",
+									"\r",
+									"    var numRec = jsonData.data.lineRecords;\r",
+									"    var lenghtRec = numRec.length;\r",
+									"\r",
+									"    // var rStart = pm.collectionVariables.get(\"cus_LIDB_c_MultiLRN_StartRecord\");\r",
+									"    // var rEnd = pm.collectionVariables.get(\"cus_LIDB_c_MultiLRN_EndRecord\");\r",
+									"    // var temp = Number(rStart) + Number(jsonData.data.lineRecords.length) - 1;\r",
+									"   \r",
+									"    // console.log(\"TEMP \\t\" + temp);\r",
+									"    // console.log(\"LENGHT \\t\" + Number(jsonData.data.lineRecords.length))\r",
+									"    // console.log(\"JSONLAST \\t\" + Number(jsonData.data.LAST));\r",
+									"    // pm.expect(Number(jsonData.data.LAST)).to.be.eql(temp);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"  var toResend = jsonData.data.MORE;\r",
+									"  var lrnBegin =  1 + Number(jsonData.data.LAST);\r",
+									"\r",
+									"  pm.collectionVariables.set(\"cus_LIDB_c_MultiLRN_StartRecord\",lrnBegin );\r",
+									"\r",
+									"  var lrnEnd =  pm.collectionVariables.get(\"cus_LIDB_c_MultiLRN_EndRecord\");\r",
+									"\r",
+									"  if(toResend == \"M\" && lrnBegin < lrnEnd){\r",
+									"\r",
+									"    pm.expect(jsonData.data.MORE).to.include(\"M\");\r",
+									"    postman.setNextRequest(\"0002_POST_MultiLRN_SuccessScenarioMORE=M\");\r",
+									"\r",
+									"}\r",
+									"else{\r",
+									"\r",
+									"    pm.expect(jsonData.data.MORE).to.include(\"A\");\r",
+									"    var resetStartRecord = pm.collectionVariables.get(\"cus_LIDB_c_MultiLRN_StartRecord_Persist\");\r",
+									"    pm.collectionVariables.set(\"cus_LIDB_c_MultiLRN_StartRecord\", resetStartRecord);\r",
+									"   // postman.setNextRequest(null);\r",
+									"}\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"startLRN\":{{cus_LIDB_c_MultiLRN_StartRecord}},\r\n    \"endLRN\":  {{cus_LIDB_c_MultiLRN_EndRecord}}\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/getLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"getLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0003_POST_MultiLRN_RangeNotFoundScenarioMORE=M",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in RTRV-GLR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_notFound\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(false);\r",
+									"    pm.expect(jsonData.description).to.eql(\"failure\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"       pm.expect(jsonData.error).not.to.be.empty;\r",
+									"       pm.expect(jsonData.data).to.be.empty;\r",
+									"       //pm.expect(jsonData.error.reason).to.be.equal(\"record does not exist\");\r",
+									"       pm.expect(jsonData.error.resource.termRpt).to.be.equal(\"DENIED\");\r",
+									"       pm.expect(jsonData.error.resource.errorCode).to.be.not.eql(\"00\");\r",
+									"   \r",
+									"    //pm.expect(jsonData.data.lineRecords[0].LRN).not.eq(undefined);\r",
+									"    //pm.expect(jsonData.data.lineRecords[0].href).not.eq(undefined);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"startLRN\":\"2012019998\",\r\n    \"endLRN\":  \"2012019999\"\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/getLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"getLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0004_POST_MultiLRN_SyntaxErrorScenarioMORE=M",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in RTRV-GLR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_badRequest\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(false);\r",
+									"    pm.expect(jsonData.description).to.eql(\"failure\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"       pm.expect(jsonData.error).not.to.be.empty;\r",
+									"       pm.expect(jsonData.data).to.be.empty;\r",
+									"       pm.expect(jsonData.error.reason).to.be.equal(\"Syntax Error\");\r",
+									"       pm.expect(jsonData.error.resource.termRpt).to.be.equal(\"DENIED\");\r",
+									"       pm.expect(jsonData.error.resource.errorCode).to.be.not.eql(\"00\");\r",
+									"   \r",
+									"    //pm.expect(jsonData.data.lineRecords[0].LRN).not.eq(undefined);\r",
+									"    //pm.expect(jsonData.data.lineRecords[0].href).not.eq(undefined);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"startLRN\":\"20120100231\",\r\n    \"endLRN\":  \"20120101451\"\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/getLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"getLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0005_POST_MultiLRN_UpdateLRNSuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.data).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.num).to.eql(\"03\");\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"    checkPassed ++;\r",
+									"}); \r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"updates\":[\r\n\t    {\r\n             \"LRN\":\"2012010004\",\r\n             \"LC\":\"2101120003000222\",\r\n             \"AL\":\"This is the alphanumeric 40chars string\",\r\n             \"LOE\":\"01111\",\r\n             \"CCE\":\"0\",\r\n             \"CCS\":\"0123451101\",\r\n             \"NNC\":\"01012052223434\",\r\n             \"OBSI\":\"11111111\",\r\n             \"FLI\":\"01\",\r\n             \"LAO\":\"1234\",\r\n             \"LBSP\":\"9296\",\r\n             \"LRAO\":\"877\",\r\n             \"AOB\":\"111111\",\r\n             \"CNAM\":\"JANE N JOHNDOE\"\r\n\t    },\r\n\t    {\r\n            \"LRN\":\"2012010005\",\r\n            \"LC\":\"2101120003000222\",\r\n            \"AL\":\"This is the alphanumeric 40chars string\",\r\n            \"LOE\":\"01111\",\r\n            \"CCE\":\"0\",\r\n            \"CCS\":\"0123451101\",\r\n            \"NNC\":\"01012052223434\",\r\n            \"OBSI\":\"11111111\",\r\n            \"FLI\":\"01\",\r\n            \"LAO\":\"1234\",\r\n            \"LBSP\":\"9296\",\r\n            \"LRAO\":\"877\",\r\n            \"AOB\":\"111111\",\r\n            \"CNAM\":\"JANE N JOHNDOE1\"\r\n\t    },\r\n\t    {\r\n            \"LRN\":\"2012010006\",\r\n            \"LC\":\"2101120003000222\",\r\n            \"AL\":\"This is the alphanumeric 40chars string\",\r\n            \"LOE\":\"01111\",\r\n            \"CCE\":\"0\",\r\n            \"CCS\":\"0123451101\",\r\n            \"NNC\":\"01012052223434\",\r\n            \"OBSI\":\"11111111\",\r\n            \"FLI\":\"01\",\r\n            \"LAO\":\"1234\",\r\n            \"LBSP\":\"9296\",\r\n            \"LRAO\":\"877\",\r\n            \"AOB\":\"111111\",\r\n            \"CNAM\":\"JANE N JOHNDOE2\"\r\n\t    }\r\n\t]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0006_POST_MultiLRN_UpdateAndDeleteLRN_ALL_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"\r",
+									"    pm.expect(jsonData.data.num).to.be.not.empty;\r",
+									"    pm.expect(jsonData.data).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.num).to.eql(\"05\");\r",
+									"    checkPassed ++;\r",
+									"}); \r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"updates\":[\r\n      {\r\n         \"LRN\":\"2012010000\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010001\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE1\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010002\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE2\"\r\n      }\r\n   ]\r\n      ,\r\n   \"deletes\":[\r\n      \"2012010000\",\r\n      \"2012013001\"\r\n   ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0007_POST_MultiLRN_UpdateAndDeleteLRN_Partial_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_notFound\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(false);\r",
+									"    pm.expect(jsonData.description).to.eql(\"failure\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.error).to.be.not.empty;\r",
+									"    pm.expect(jsonData.data).to.be.empty;\r",
+									"    pm.expect(jsonData.error.resource.termRpt).to.be.equal(\"DENIED\");\r",
+									"    pm.expect(jsonData.error.resource.errorCode).to.be.not.eql(\"00\");\r",
+									"    checkPassed ++;\r",
+									"}); \r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"updates\":[\r\n     \r\n      {\r\n         \"LRN\":\"2012010001\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE1\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010002\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE2\"\r\n      },\r\n       {\r\n         \"LRN\":\"9999999999\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\",\r\n         \"MASSUPD01\":\"111111111111111111111111111111\"\r\n      }\r\n   ]\r\n\t\r\n\r\n   ,\r\n   \"deletes\":[\r\n      \"2012010000\",\r\n      \"2012013001\"\r\n   ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0008_POST_MultiLRN_UpdateAndDeleteLRN_LargeRequest_45_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.data.num).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.num).to.be.not.empty;\r",
+									"    pm.expect(jsonData.data.num).to.be.eql(\"45\");\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"    checkPassed ++;\r",
+									"}); \r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"updates\":[\r\n      {\r\n         \"LRN\":\"2012010000\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010001\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE1\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010002\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE2\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010003\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010000\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010005\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010006\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010007\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010008\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010009\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010010\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010011\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010012\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010013\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010014\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010015\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010016\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010017\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010018\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010019\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010020\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010021\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010022\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010023\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010024\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010024\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010025\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010026\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010028\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010029\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010031\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010032\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010033\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010034\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010035\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010036\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010037\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010038\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010039\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010040\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010041\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010042\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      } ]\r\n      ,\r\n   \"deletes\":[\r\n      \"2012010000\",\r\n      \"2012013001\"\r\n   ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0009_POST_MultiLRN_UpdateAndDeleteLRN_LargeRequest_FailScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_badRequest\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(false);\r",
+									"    pm.expect(jsonData.description).to.eql(\"failure\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"       pm.expect(jsonData.error).not.to.be.empty;\r",
+									"       pm.expect(jsonData.error.reason).to.be.equal(\"Syntax Error\");\r",
+									"       pm.expect(jsonData.error.resource.termRpt).to.be.equal(\"DENIED\");\r",
+									"       pm.expect(jsonData.error.resource.errorCode).to.be.not.eql(\"00\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"updates\":[\r\n      {\r\n         \"LRN\":\"2012010000\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010001\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE1\"\r\n      },\r\n      {\r\n         \"LRN\":\"2012010002\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE2\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010003\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010000\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111111\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010005\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010006\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010007\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010008\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010009\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010010\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010011\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010012\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010013\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010014\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010015\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010016\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010017\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010018\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010019\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010020\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010021\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010022\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010023\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010024\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010024\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010025\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010026\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  \t  {\r\n         \"LRN\":\"2012010028\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010029\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010030\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n\t\t \"LCE\":\"01111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"9999999999\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },{\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      },\r\n\t  {\r\n         \"LRN\":\"2012010027\",\r\n         \"LC\":\"2101120003000222\",\r\n         \"AL\":\"This is the alphanumeric 40chars string\",\r\n         \"LOE\":\"01111\",\r\n         \"CCE\":\"0\",\r\n         \"CCS\":\"0123451101\",\r\n         \"NNC\":\"01012052223434\",\r\n         \"OBSI\":\"11111121\",\r\n         \"FLI\":\"01\",\r\n         \"LAO\":\"1234\",\r\n         \"LBSP\":\"9296\",\r\n         \"LRAO\":\"877\",\r\n         \"AOB\":\"111111\",\r\n         \"CNAM\":\"JANE N JOHNDOE\"\r\n      }\r\n \r\n   ]\r\n      ,\r\n   \"deletes\":[\r\n      \"2012010000\",\r\n      \"2012013001\"\r\n   ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0010_POST_getUpdatedMultiLRN_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in RTRV-GLR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"    pm.expect(jsonData.data).to.be.not.empty;\r",
+									"   \r",
+									"    pm.expect(jsonData.data.lineRecords[0].LRN).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.lineRecords[0].href).not.eq(undefined);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"startLRN\":\"2012010000\",\r\n    \"endLRN\":  \"2012010002\"\r\n\t\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/getLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"getLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0011_POST_deleteMultiLRN_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.error).to.be.empty;\r",
+									"    pm.expect(jsonData.data).to.be.not.empty;\r",
+									"   \r",
+									"    pm.expect(jsonData.data.num).not.eq(undefined);\r",
+									"    pm.expect(jsonData.data.num).to.be.eql(\"03\");\r",
+									"    pm.expect(jsonData.data.num).to.be.not.empty;\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"deletes\":[\r\n      \"2012010000\",\r\n      \"2012010001\",\r\n      \"2012010002\"\r\n   ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0012_POST_deleteNonExistentMultiLRN_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_notFound\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(false);\r",
+									"    pm.expect(jsonData.description).to.eql(\"failure\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"       pm.expect(jsonData.error).not.to.be.empty;\r",
+									"       pm.expect(jsonData.data).to.be.empty;\r",
+									"\r",
+									"       //pm.expect(jsonData.error.reason).to.be.equal(\"record does not exist\");\r",
+									"       pm.expect(jsonData.error.resource.termRpt).to.be.equal(\"DENIED\");\r",
+									"       pm.expect(jsonData.error.resource.errorCode).to.be.not.eql(\"00\");\r",
+									"   checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"deletes\":[\r\n      \"2012010000\",\r\n      \"2012010001\",\r\n      \"9012099802\"\r\n   ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "0013_POST_deleteNonExistentMultiLRNLargeRequest_SuccessScenario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let checkCnt = 0\r",
+									"let checkPassed = 0\r",
+									"\r",
+									"pm.test(\"Successful POST request in UPD-ULR\", function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.response.to.have.status(parseInt(pm.globals.get(\"const_LIDB_g_getSuccCode\")));\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than \" +pm.globals.get(\"const_LIDB_g_timeoutInMs\"), function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(parseInt(pm.globals.get('const_LIDB_g_timeoutInMs')))\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json(); \r",
+									"\r",
+									"pm.test(\"Response status is success : \" + jsonData.status, function () {\r",
+									"    checkCnt ++;\r",
+									"    pm.expect(jsonData.status).to.eql(true);\r",
+									"    pm.expect(jsonData.description).to.eql(\"success\");\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"JSON Response body validation : \" , function()\r",
+									"{\r",
+									"    checkCnt ++;\r",
+									"       pm.expect(jsonData.error).to.be.empty;\r",
+									"       pm.expect(jsonData.data).not.to.be.empty;\r",
+									"\r",
+									"       //pm.expect(jsonData.error.reason).to.be.equal(\"record does not exist\");\r",
+									"       //pm.expect(jsonData.error.resource.termRpt).to.be.equal(\"DENIED\");\r",
+									"       //pm.expect(jsonData.error.resource.errorCode).to.be.not.eql(\"00\");\r",
+									"   \r",
+									"    //pm.expect(jsonData.data.lineRecords[0].LRN).not.eq(undefined);\r",
+									"    //pm.expect(jsonData.data.lineRecords[0].href).not.eq(undefined);\r",
+									"    checkPassed ++;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"if (checkCnt != checkPassed ) {\r",
+									"script_status = checkCnt - checkPassed + \" out of \" + checkCnt + \" verification check(s) FAILED\"\r",
+									"var current_fail = pm.collectionVariables.get('total_fail')\r",
+									"pm.collectionVariables.set('total_fail', current_fail+1);\r",
+									"} else {\r",
+									"    script_status = checkPassed + \" out of \" + checkCnt + \" verification check(s) PASSED\"\r",
+									"    var current_pass = pm.collectionVariables.get('total_pass')\r",
+									"    pm.collectionVariables.set('total_pass', current_pass+1);\r",
+									"}\r",
+									"\r",
+									"let results = request.name + \"\\t \\t\" + script_status + \"\\n\"\r",
+									"\r",
+									"var responses = pm.collectionVariables.get('collection_result');\r",
+									"//responses = JSON.parse(responses);\r",
+									"responses.push(results);\r",
+									"pm.collectionVariables.set('collection_result', responses);\r",
+									"\r",
+									"let opts = {\r",
+									"    requestName: 'ATT_LIDB-RestApi_Collection_results',\r",
+									"    fileExtension: 'log',\r",
+									"    mode: 'writeFile', // Change this to any function of the fs library of node to use it.\r",
+									"    //uniqueIdentifier: false,\r",
+									"   // uniqueIdentifier: Date.now(),\r",
+									"    uniqueIdentifier: 'status',\r",
+									"    responseData: pm.collectionVariables.get('collection_result') + \"\\nTOTAL TEST REQUESTS EXECUTED = \" + pm.collectionVariables.get('total_test_requests') + \"\\nTOTAL TEST REQUESTS PASSED = \" + pm.collectionVariables.get('total_pass') + \"\\nTOTAL TEST REQUESTS FAILED = \" + pm.collectionVariables.get('total_fail')\r",
+									"};\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url: 'http://192.4.252.32:3000/write',\r",
+									"    method: 'POST',\r",
+									"    header: 'Content-Type:application/json',\r",
+									"   \r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify(opts)\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    console.log(res);\r",
+									"});\r",
+									"\r",
+									"function fn1() {\r",
+									"    pm.sendRequest('http://192.4.252.32:8082/emailtrigger', (err, response) => {\r",
+									"    // This will have the output of your batch file\r",
+									"        console.log(response.text());\r",
+									"    })\r",
+									"}\r",
+									"\r",
+									"function fn2() {\r",
+									"    pm.sendRequest('http://192.4.252.32:8082/dellocallogs', (err, response) => {\r",
+									"    // This will have the output of your batch file\r",
+									"        console.log(response.text());\r",
+									"    })\r",
+									"}\r",
+									"\r",
+									"setTimeout(fn1, 3000)\r",
+									"setTimeout(fn2, 20000)\r",
+									"\r",
+									"// Reset at the last\r",
+									"pm.collectionVariables.set('total_test_requests', 0);\r",
+									"pm.collectionVariables.set('total_fail', 0);\r",
+									"pm.collectionVariables.set('total_pass', 0);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"strictSSL": false
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{cus_LIDB_c_accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"deletes\":[\r\n      \"2012010001\",\r\n\"2012010002\",\r\n\"2012010003\",\r\n\"2012010004\",\r\n\"2012010005\",\r\n\"2012010006\",\r\n\"2012010007\",\r\n\"2012010008\",\r\n\"2012010009\",\r\n\"2012010010\",\r\n\"2012010011\",\r\n\"2012010012\",\r\n\"2012010013\",\r\n\"2012010014\",\r\n\"2012010015\",\r\n\"2012010016\",\r\n\"2012010017\",\r\n\"2012010018\",\r\n\"2012010019\",\r\n\"2012010020\",\r\n\"2012010021\",\r\n\"2012010022\",\r\n\"2012010023\",\r\n\"2012010024\",\r\n\"2012010025\",\r\n\"2012010026\",\r\n\"2012010027\",\r\n\"2012010028\",\r\n\"2012010029\",\r\n\"2012010030\",\r\n\"2012010031\",\r\n\"2012010032\",\r\n\"2012010033\",\r\n\"2012010034\",\r\n\"2012010035\",\r\n\"2012010036\",\r\n\"2012010037\",\r\n\"2012010038\",\r\n\"2012010039\",\r\n\"2012010040\",\r\n\"2012010041\",\r\n\"2012010042\",\r\n\"2012010043\",\r\n\"2012010044\",\r\n\"2012010045\",\r\n\"2012010046\",\r\n\"2012010047\",\r\n\"2012010048\",\r\n\"2012010049\",\r\n\"2012010050\",\r\n\"2012010051\",\r\n\"2012010052\",\r\n\"2012010053\",\r\n\"2012010054\",\r\n\"2012010055\",\r\n\"2012010056\",\r\n\"2012010057\",\r\n\"2012010058\",\r\n\"2012010059\",\r\n\"2012010060\",\r\n\"2012010061\",\r\n\"2012010062\",\r\n\"2012010063\",\r\n\"2012010064\",\r\n\"2012010065\",\r\n\"2012010066\",\r\n\"2012010067\",\r\n\"2012010068\",\r\n\"2012010069\",\r\n\"2012010070\",\r\n\"2012010071\",\r\n\"2012010072\",\r\n\"2012010073\",\r\n\"2012010074\",\r\n\"2012010075\",\r\n\"2012010076\",\r\n\"2012010077\",\r\n\"2012010078\",\r\n\"2012010079\",\r\n\"2012010080\",\r\n\"2012010081\",\r\n\"2012010082\",\r\n\"2012010083\",\r\n\"2012010084\",\r\n\"2012010085\",\r\n\"2012010086\",\r\n\"2012010087\",\r\n\"2012010088\",\r\n\"2012010089\",\r\n\"2012010090\",\r\n\"2012010091\",\r\n\"2012010092\",\r\n\"2012010093\",\r\n\"2012010094\",\r\n\"2012010095\",\r\n\"2012010096\",\r\n\"2012010097\",\r\n\"2012010098\",\r\n\"2012010099\"\r\n      \r\n   ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{cus_LIDB_c_hostName}}:{{cus_LIDB_c_portNumber}}/{{cus_LIDB_c_lidbApp}}/lrn/updateLineRecords",
+							"host": [
+								"{{cus_LIDB_c_hostName}}"
+							],
+							"port": "{{cus_LIDB_c_portNumber}}",
+							"path": [
+								"{{cus_LIDB_c_lidbApp}}",
+								"lrn",
+								"updateLineRecords"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{cus_LIDB_c_accessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"let opts = {",
+					"    requestName: request.name,",
+					"    fileExtension: 'log',",
+					"    mode: 'writeFile', // appendFile",
+					"    //uniqueIdentifier: false,",
+					"    uniqueIdentifier: true,",
+					"    responseData:\"\\nRequest Method : \" + request.method + \"\\nRequest URL : \" + request.url + \"\\nRequest Header : \" + JSON.stringify(request.headers) + \"\\nRequest Data : \" + request.data +  \"\\nResponse Header : \\n\" + pm.response.headers +\"\\nResponse Code : \" + pm.response.code + \"\\nResponse Body : \" + pm.response.text() ",
+					"};",
+					"",
+					"pm.sendRequest({",
+					"    url: 'http://192.4.252.32:3000/write',",
+					"    method: 'POST',",
+					"    header: 'Content-Type:application/json',",
+					"   ",
+					"    body: {",
+					"        mode: 'raw',",
+					"        raw: JSON.stringify(opts)",
+					"    }",
+					"}, function (err, res) {",
+					"    console.log(res);",
+					"});",
+					"",
+					"var current_tot = pm.collectionVariables.get('total_test_requests')",
+					"pm.collectionVariables.set('total_test_requests', current_tot+1);",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cus_LIDB_c_clientId",
+			"value": "rest-lidb"
+		},
+		{
+			"key": "cus_LIDB_c_clientSecret",
+			"value": "e5b5fd0f-bc8f-401a-a025-0789987ccacf"
+		},
+		{
+			"key": "cus_LIDB_c_scope",
+			"value": "openid"
+		},
+		{
+			"key": "cus_LIDB_c_tokenEndpoint",
+			"value": "http://localhost:8180/auth/realms/restlidb-auth/protocol/openid-connect/token"
+		},
+		{
+			"key": "cus_LIDB_c_accessToken",
+			"value": ""
+		},
+		{
+			"key": "cus_LIDB_c_granttype",
+			"value": "\"password\""
+		},
+		{
+			"key": "cus_LIDB_c_user",
+			"value": "\"restadmin\""
+		},
+		{
+			"key": "cus_LIDB_c_password",
+			"value": "\"restadmin\""
+		},
+		{
+			"key": "cus_LIDB_c_restLidbWar",
+			"value": "restlidb/v1"
+		},
+		{
+			"key": "cus_LIDB_c_hostName",
+			"value": "https://10.105.82.20"
+		},
+		{
+			"key": "cus_LIDB_c_portNumber",
+			"value": "8543"
+		},
+		{
+			"key": "cus_LIDB_c_hubId",
+			"value": "1"
+		},
+		{
+			"key": "cus_LIDB_c_userName1",
+			"value": "partha"
+		},
+		{
+			"key": "cus_LIDB_c_lidbApp",
+			"value": "restlidb/v1"
+		},
+		{
+			"key": "cus_LIDB_c_LRN_Begin",
+			"value": "2012010011"
+		},
+		{
+			"key": "cus_LIDB_c_LRN_CustomerName",
+			"value": "AT&T"
+		},
+		{
+			"key": "cus_LIDB_c_LRN_UpdateAction",
+			"value": "U"
+		},
+		{
+			"key": "cus_LIDB_c_LRN_Begin2",
+			"value": "2013010011"
+		},
+		{
+			"key": "cus_LIDB_c_GRN_Begin",
+			"value": "201201"
+		},
+		{
+			"key": "cus_LIDB_c_GRN_Begin2",
+			"value": "201301"
+		},
+		{
+			"key": "cus_LIDB_c_wrong_password",
+			"value": "\"wrongpassword\""
+		},
+		{
+			"key": "cus_LIDB_c_LRN_Begin_body",
+			"value": "\"2012010011\""
+		},
+		{
+			"key": "cus_LIDB_c_Version",
+			"value": "v1"
+		},
+		{
+			"key": "cus_LIDB_c_MultiLRN_StartRecord",
+			"value": "2012010001"
+		},
+		{
+			"key": "cus_LIDB_c_MultiLRN_EndRecord",
+			"value": "2012011000"
+		},
+		{
+			"key": "cus_LIDB_c_MultiLRN_StartRecord_Persist",
+			"value": "2012010001"
+		},
+		{
+			"key": "collection_result",
+			"value": ""
+		},
+		{
+			"key": "total_test_requests",
+			"value": ""
+		},
+		{
+			"key": "total_pass",
+			"value": ""
+		},
+		{
+			"key": "total_fail",
+			"value": ""
+		},
+		{
+			"key": "total_execution_time",
+			"value": ""
+		}
+	]
+}
